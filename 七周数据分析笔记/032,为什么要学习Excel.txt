@@ -1,0 +1,80 @@
+1. 为什么要学习Excel?(032)
+    Excel首先是一个好用的工具
+    不因为你会python而成为数据分析师, 而是能用任何工具解决问题
+    Excel和Sql 适用于敏捷,快速,需要即时响应的需求
+    Python, BI, ETL 适用于常规,频繁可复用或可工程化的需求
+    office2013+
+    主动搜索寻求帮助, 多练习
+
+2. 函数种类
+    文本清洗
+    关联匹配
+    逻辑运算
+    计算统计
+    时间序列
+
+3. 字符编码的发展
+    bit
+    ==> byte
+    ==> ASCII (1字节) ==>EASCII(对ASCII扩展)
+    ==> GB2312 (2字节)
+    ==> GBK (2字节, 对GB2312扩展)
+    ==> GB18030 (2字节, 融入港澳台字符)
+    ==> Unicode (2字节, 全球码)
+    ==> UTF-8 (2-3字节)
+
+    最常见最常用的:
+    ASCII, Unicode, UTF-8, GBK
+
+
+语言                         字符集                        正式名称
+英语、西欧语         ASCII，ISO-8859-1        MBCS 多字节
+简体中文                   GB2312                     MBCS 多字节
+繁体中文                   BIG5                         MBCS 多字节
+简繁中文                   GBK                          MBCS 多字节
+中文、日文及朝鲜语   GB18030                   MBCS 多字节
+各国语言                   UNICODE，UCS        DBCS 宽字节
+
+4. Excel常用文本清洗函数(034)
+    Find
+    Substitute
+    Left
+    Right
+    Mid
+    Text
+    Concatenate
+    Trim
+    Replace
+    Len
+
+5. Excel关联匹配函数(035)
+    Lookup
+    Row
+    Vlookup
+    Column
+    Index
+    Offset
+    Match
+    Hyperlink
+
+6. 逻辑运算函数(036)
+    And
+    Or
+    Not
+    If
+    Is
+    False/True
+
+7. 计算统计函数(037)
+    Sum
+    Rank
+    Stdev
+    Sumproduct
+    Rand Randbetween
+    Substotal
+    Count
+    Averagea
+    Int
+    Max Min
+    Quartile
+    Round
