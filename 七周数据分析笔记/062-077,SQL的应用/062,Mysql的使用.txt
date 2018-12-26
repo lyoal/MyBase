@@ -1,0 +1,41 @@
+1. Mysql的安装(062)
+    版本: 5.7
+    过程--->默认开发者模式
+
+2. 认识表(063)
+    什么是表(二维表)
+    表为什么要有主键?唯一标识符
+
+3. 数据库实操(064)
+    使用Mysql的workbench工具
+    创建数据库(注意编码设置)
+    创建表(注意编码设置)
+    导入csv文件(编码格式应该与数据库的编码格式统一)
+
+4. SQL select(065)
+5. SQL 条件查找, where, and, or, like, all, any, exsist  (066)
+6. SQL group by 分组查找(基础)(067)
+7. SQL group by 分组后条件查找 having 的用法(068)
+8. SQL函数(069)
+    left 获取字符串左起指定数量的字符
+    locate 类似Excel的find函数
+    length 获取字符串的长度
+
+9. SQL子查询(070)
+10. SQL join 连接查找(071)
+11. SQL leetcode (072)
+    leetcode.com 一个刷题网站
+
+12. SQL 加载(073)
+    进到data数据库
+    use data;
+    load data local infile 'C:/Users/abc.csv' into table data.userinfo fields terminated by ',';
+    加载以 逗号 为分隔符的数据文件abc.csv 到本地数据表data.userinfo 中
+
+13. SQL 时间(074)
+    SELECT paidTime, date(paidTime), date_format(paidTime, '%Y-%m-%d'), date_add(paidTime, interval 1 day) from data.orderinfo;
+    时间格式变换操作
+
+14. SQL 练习(1)(075)
+15. SQL 练习(2)(076)
+16. SQL 连接 PowerBI
