@@ -1,0 +1,183 @@
+1. Python seaborn(1) (140)
+    import pandas as pd //是基于numpy的更高级的抽象, 用于处理更加复杂数据类型运算
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns  //是基于 matplotlib的高级抽象, 用于绘制更加高级的图像
+    %matplotlib inline  //jupyter工具内置命令, 用于python可视化绘图
+
+    seaborn官网: seaborn.pydata.org/examples/index.html
+    分布:
+        distplot: 概率分布图/直方图
+        kdeplot: 概率密度图
+        jointplot: 联合密度图
+        pairplot: 多变量图
+
+    分类:
+        boxplots: 箱线图
+        violinplots: 提琴图
+        barplot: 柱形图
+        factorplot: 因子图
+
+    线性:
+        Implot: 回归图
+        heatmap
+
+    columns = ['user_id', 'order_dt', 'order_products', 'order_amount']
+    df = pd.read_table('CDNOW_master.txt', name = columns, sep='\s+')
+    df.head()
+    sns.distplot(df.order_amount) //概率分布
+    sns.distplot(df.order_amount, kde=False) //直方图
+
+    sns.kdeplot(df.order_amount) //不带直方的概率密度图
+
+    grouped_user = df.groupby('user_id').sum()
+    grouped_user.head()
+    sns.jointplot(grouped_user.order_products, grouped_user.order_amount) //联合密度图
+    sns.jointplot(grouped_user.order_products, grouped_user.order_amount, kind='reg') //联合密度图, 线性回归
+
+2. Python seaborn(2) (140)
+    df['order_dt'] = pd.to_datetime(df.order_dt, format='%Y%m%d')
+    rfm = df.pivot_table(index = 'user_id',
+                                    values  = ['order_products', 'order_amount', 'order_dt'],
+                                    aggfunc = {
+                                        'order_dt':'max',
+                                        'order_amount':'sum',
+                                        'order_products':'sum'
+                                    })
+    rfm['R'] = (rfm.order_dt - rfm.order_dt.max()) / np.timedelta64(1,'D')
+    rfm.rename(columns = {'order_products':'F', 'order_amount':'M'}, inplace=True)
+    rfm.head()
+    sns.jointplot(rfm.R, rfm.F) //联合密码图
+    sns.jointplot(rfm.R, rfm.F, kind='reg') //在上面的图上添加回归线
+
+    sns.pairplot(rfm[['R', 'F', 'M']]) //多变量图
+    sns.pairplot(rfm[['R', 'F', 'M']], palette='husl')  //增加多颜色显示图
+
+3. Python seaborn(3) (142)
+    df = pd.read_csv('cy.csv', encoding='gbk')
+    plt.figure(figsize=(20,5))
+    sns.boxplot(x='类型', y='口味', data=df) //箱线图
+
+    df2 = df.query("(城市='上海') | (城市='北京')")
+    plt.figure(figsize=(20,5))
+    sns.boxplot(x='类型', y='口味', hue='城市', data=df2) //对比箱线图, hue参数是一个对比维度
+
+    提琴图, 是箱线图的一个变种(相对更加直观)
+    plt.figure(figsize=(20,5))
+    sns.violinplot()(x='类型', y='口味', data=df)
+
+    plt.figure(figsize=(20,5))
+    sns.violinplot(x='类型', y='口味', hue='城市', data=df2) //对比图
+    sns.violinplot(x='类型', y='口味', hue='城市', data=df2, split=True) //对比图,将对比的双方拼接起来
+
+4. Python seaborn(4) (143)
+    因子图, 是以上几个图的超集
+    plt.figure(figsize=(20,5)) //此语句在因子图是失效的, 须使用其内置的size参数
+    sns.factorplot(x='类型', y='口味', data=df, size=10) //类型简化版的箱线图
+
+    sns.factorplot(x='类型', y='口味', hue='城市', data=df2, size=20, ci=50) //对比因子图, ci 表示透明
+
+    sns.factorplot(x='类型', y='口味', hue='城市', kind='box', data=df2, size=20, ci=50) //变成箱线图, 只上面的箱线图一样的, 如果kind='violin' 就会变成提琴图
+
+    sns.factorplot(x='类型', y='口味', hue='城市', kind='box', data=df2, size=20, ci=50, aspec=4) //添加一个aspect, 即是修改画布的高度为原高度的 1/4
+
+    sns.factorplot(x='类型', y='口味', col='城市', kind='box', data=df2, size=20, ci=50, aspec=2) //col参数是就将图根据城市分割成两个图, 即一行多列, 有多少个城市就在一行上绘制多少个图
+
+    sns.factorplot(x='类型', y='口味', col='城市', kind='box', data=df2, size=20, ci=50, aspec=2, col_wrap=4) //如上例中会因城市过多而导致绘制的图变的畸形, col_wrap 参数这时可以用来限制图的个数, 即限制一行最多显示4个图, 那如果有20个城市就会显示5行4列
+
+5. Python seaborn(5) (144)
+    回归图 Implot (reg)
+    sns.Implot(x='口味', y='环境', data=df) //线性回归图
+
+    sns.Implot(x='口味', y='环境', data=df2, hue='城市') //线性回归图, 增加对比维度
+
+    sns.Implot(x='口味', y='环境', data=df2, col='城市') //线性回归图, 分割图表, 一行多列, 每个城市一个图
+    sns.Implot(x='口味', y='环境', data=df2, row='城市')  //相比上图, 是分割的方式是 1 列多行
+
+    sns.Implot(x='口味', y='环境', data=df2, col='城市', order=2) //order=1默认是一个线性, =2时就是一个非线性关系图, 一元二次方程
+
+6. Python seaborn(6) (145)
+    热力图 heatmap
+    plt.figure(figsize=(20,20))
+    pt = df.pivot_table(index='城市', columns='类型', values='口味', aggfunc='mean')
+    sns.heatmap(pt)
+
+    sns.heatmap(pt, annot=True) //在热力图上显示出数值
+
+7. Python Superset(1) (146)
+    conda  create  -n  superset  python=3.4  //创建superset的运行的虚拟环境
+
+8. Python Superset(2) (147)
+    激活
+    activate  superset //进入虚拟环境
+    pip  install  superset  -i  https://pypi.douban.com/simple //安装superset, 使用国内的镜像
+
+    Python常用包下载 https://www.lfd.uci.edu/~gohlke/pythonlibs/
+
+    切换到superset的安装路径下, 初始化:
+    fabmanager  create-admin  --app superset
+    python  superset  db  upgrade  //更新superset数据库
+    python  superset  load_examples  //下载样例
+    python superset init  //初始化
+    python superset runserver  //启动superset服务, Windows下会报错可以尝试跟一个 -d 参数, 以开发者模式运行服务.
+
+9. Python Superset(3) (148)
+    python superset runserver  //启动superset服务,
+    Windows下会报错可以尝试跟一个 -d 参数, 以开发者模式运行服务.
+
+10. Python Superset(4) (149)
+
+11. Python Superset(5) (150)
+    SQL编辑中, 模糊查询使用 双 %
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
